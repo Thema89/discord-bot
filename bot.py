@@ -42,4 +42,4 @@ async def on_message(message):
     elif message.content.startswith('$'):
         await client.send_message(message.channel, 'No command found, type `$help` for commands.')
 
-client.run('MTkwMDM1MDM4NjAyMTMzNTA0.Cjl5fg.AIhBejRhC70pvp9fTz3uwPLxYKI')
+client.run('token here')
