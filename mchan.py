@@ -34,7 +34,7 @@ async def cchannel(message, client):
         if '"' in message.content:
             parse = message.content.split('"')
             for i in range(0, len(parse)):
-                parse[i] = parse[i].rstrip().lstrip()
+                parse[i] = parse[i].strip()
         else:
             parse = message.content.split()
 
@@ -76,6 +76,14 @@ async def cchannel(message, client):
             limit = int(lim)
         else:
             limit = 0
+
+        chanlim = sum(c.owner == message.author for c in voice_channels)
+
+        if chanlim < 4:
+            pass
+        else:
+            await client.send_message(message.channel, 'You can only create up to 4 channels, you can use $dchannel to delete some though.')
+            break
 
         if str(lim) == 'private':
             everyone = discord.PermissionOverwrite(connect=False)
