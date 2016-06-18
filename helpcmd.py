@@ -10,7 +10,7 @@ class Command:
         self.adv = adv
 
 cchannel = Command(
-    cdesc='Creates a channel with the given `name`. If `current` is passed in as the name, it will fetch the current game you are playing. `type` can be an intiger which will indicate the client limit in the channel. Can also be either `owlobby` or `cslobby` for 6 and 5 player limits respectively.',
+    cdesc='Creates a channel with the given `name`. If `current` is passed in as the name, it will fetch the current game you are playing. `type` can be an intiger which will indicate the client limit in the channel. It can be `private`, which will make it so only whitelisted users can join (see `$help echannel` for more on whitelisting) Can also be either `owlobby` or `cslobby` for 6 and 5 player limits respectively.',
     cname='cchannel',
     args='name;type',
     adv = 'To use spaces in the channel name, simply use quotations, so you would type "Name". The text inside the quotations is literally interpreted, whilst inputting the channel name without quotations will turn it from `this` to `This`. Meanwhile, typing `"This"` would return `This`'
@@ -25,7 +25,7 @@ echannel = Command(
     cdesc='Edits a channel.',
     cname='echannel',
     args='name',
-    adv='The valid edit commands are the following:\n `#name <name>` - Replaces the current name with the <name>\n `#limit <limit>` - Replaces the user limit with <limit>'
+    adv='The valid edit commands are the following:\n `#name <name>` - Replaces the current name with the <name>\n `#limit <limit>` - Replaces the user limit with <limit>\n `#whitelist <user>` - Whitelists the <user> to your private channel'
 )
 highnoon = Command(
     cdesc="It's High Noon somewhere in the world. This command tells you where.",
