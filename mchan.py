@@ -173,7 +173,8 @@ async def echannel(message, client):
             chan = discord.utils.get(message.server.channels, name=name, type=discord.ChannelType.voice)
             channel = get_voice_channel(chan.id)
             if message.author == channel.owner:
-                await client.send_message(message.channel, "Waiting for an edit command... *(use `$help echannel` for more info)*:")
+                await client.send_message(message.channel, "Now, enter an edit command... *(use `$help echannel` for more info)*:")
+                await client.send_typing(message.channel)
                 msg = await client.wait_for_message(author=message.author, channel=message.channel)
 
                 response = msg.content.split(' ', 1)
