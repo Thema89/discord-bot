@@ -8,7 +8,6 @@ class VoiceChannel:
     def __init__(self):
         self.owner = ""
         self.chanid = 0
-        #self.roleid = 0
 
     def setOwner(self, user):
         self.owner = user
@@ -68,11 +67,7 @@ async def cchannel(message, client):
         if exist != 0:
             game += ' #%s' % num
 
-        if str(lim) == 'cslobby':
-            limit = 5
-        elif str(lim) == 'owlobby':
-            limit = 6
-        elif str(lim).isdigit():
+        if str(lim).isdigit():
             limit = int(lim)
         else:
             limit = 0
@@ -108,7 +103,12 @@ async def cchannel(message, client):
 async def dchannel(message, client):
     while True:
         await client.send_typing(message.channel)
-        parse = message.content.split(' ', 1)
+
+        if '"' in message.content:
+            parse = message.content.split('"')
+        else:
+            parse = message.content.split(' ', 1)
+
         try:
             name = parse[1]
         except IndexError:
@@ -163,13 +163,13 @@ async def echannel(message, client):
                 msg = await client.wait_for_message(author=message.author, channel=message.channel)
 
                 response = msg.content.split(' ', 1)
-                success = 'Successfully edited the voice channel'
+                success = 'Successfully edited the {0} to {1}'
 
                 if response[0] == '#name':
                     try:
                         nname = response[1]
                         await client.edit_channel(chan, name=nname)
-                        await client.send_message(message.channel, success)
+                        await client.send_message(message.channel, success.format('name',nname))
                         break
                     except IndexError:
                         await client.send_message(message.channel, 'No new name specified.')
@@ -178,7 +178,7 @@ async def echannel(message, client):
                     try:
                         limit = int(response[1])
                         await client.edit_channel(chan, user_limit=limit)
-                        await client.send_message(message.channel, success)
+                        await client.send_message(message.channel, success.format('limit',limit))
                         break
                     except IndexError:
                         await client.send_message(message.channel, 'No limit specified.')
@@ -188,7 +188,7 @@ async def echannel(message, client):
                         owner = response[1].lower()
                         nowner = discord.utils.find(lambda o: o.name.lower() == owner, message.channel.server.members)
                         channel.setOwner(nowner)
-                        await client.send_message(message.channel, success)
+                        await client.send_message(message.channel, success.format('owner',nowner))
                         break
                     except IndexError:
                         await client.send_message(message.channel, 'No new owner specified.')
@@ -202,7 +202,7 @@ async def echannel(message, client):
                         person = discord.utils.find(lambda o: o.name.lower() == arg, message.channel.server.members)
                         perms = discord.PermissionOverwrite(connect=True)
                         await client.edit_channel_permissions(chan, person, perms)
-                        await client.send_message(message.channel, success)
+                        await client.send_message(message.channel, 'Successfully added {} to the whitelist'.format(person))
                         break
                     except IndexError:
                         await client.send_message(message.channel, 'No user to whitelist.')
