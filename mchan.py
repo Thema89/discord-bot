@@ -84,6 +84,20 @@ async def cchannel(message, client):
             everyone = discord.PermissionOverwrite(connect=False)
             ownerperms = discord.PermissionOverwrite(connect=True)
             channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), (message.author, ownerperms), type=discord.ChannelType.voice)
+        elif str(lim) == 'party':
+            try:
+                members = parse[3].split(';')
+            except IndexError:
+                await client.send_message(message.channel, 'No party members specified.')
+                break
+
+            everyone = discord.PermissionOverwrite(connect=False)
+            partyperms = discord.PermissionOverwrite(connect=True)
+            channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), (message.author, partyperms), type=discord.ChannelType.voice)
+            for member in members:
+                person = discord.utils.find(lambda o: o.name.lower() == member.lower(), message.channel.server.members)
+                await client.edit_channel_permissions(channel, person, partyperms)
+
         else:
             channel = await client.create_channel(message.server, game, type=discord.ChannelType.voice)
 

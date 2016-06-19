@@ -14,8 +14,8 @@ cchannel = Command(
     cdesc='Creates a channel with the `name`.',
     cname='cchannel',
     args='name;type',
-    adv='`<name>` can be a single word in lowercase, any ammount of words inside "", or `current`. `current` will set the channel name to the game you are playing. `<type>` can be an intiger or `private`. If it is an intiger, that will be the client limit. If it is `private`, only whitelisted users will be able to join. To whitelist you need to do `$echannel <channel name>` and then use `#whitelist <name>`.',
-    example='`$cchannel something 8` will return a channel named "Something" with user limit 8\n `$cchannel "Something Cool" private` will return a whitelist-only channel named "Something Cool" with unlimited user limit but whitelist only (giving a name inside "" will be the literal name of the channel)'
+    adv='`<name>` can be a single word in lowercase, any ammount of words inside "", or `current`. `current` will set the channel name to the game you are playing. `<type>` can be an intiger, `private` or `party`. If it is an intiger, that will be the client limit. If it is `private`, only whitelisted users will be able to join. To whitelist you need to do `$echannel <channel name>` and then use `#whitelist <name>`. If it is `party`, then you must specify party members in the syntax `name1;name2;name3`. It will basically automatically whitelist all the names when the channel is initialized. You can use the normal whitelist to add more members later.',
+    example='`$cchannel something 8` will return a channel named "Something" with user limit 8\n `$cchannel "Something Cool" private` will return a whitelist-only channel named "Something Cool" with unlimited user limit but whitelist only (giving a name inside "" will be the literal name of the channel)\n `$cchannel current party nondy;agouraki`, which will create a private channel with the creator, agouraki and nondy whitelisted by default.'
 )
 dchannel = Command(
     cdesc='Deletes the channel with the **exact** name',
