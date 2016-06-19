@@ -3,35 +3,40 @@ import asyncio
 import gc
 
 class Command:
-    def __init__(self, cdesc, cname, args, adv):
+    def __init__(self, cdesc, cname, args, adv, example):
         self.desc = cdesc
         self.name = cname
         self.args = args
         self.adv = adv
+        self.example = example
 
 cchannel = Command(
-    cdesc='Creates a channel with the given `name`. If `current` is passed in as the name, it will fetch the current game you are playing. `type` can be an intiger which will indicate the client limit in the channel. It can be `private`, which will make it so only whitelisted users can join (see `$help echannel` for more on whitelisting) Can also be either `owlobby` or `cslobby` for 6 and 5 player limits respectively.',
+    cdesc='Creates a channel with the `name`.',
     cname='cchannel',
     args='name;type',
-    adv = 'To use spaces in the channel name, simply use quotations, so you would type "Name". The text inside the quotations is literally interpreted, whilst inputting the channel name without quotations will turn it from `this` to `This`. Meanwhile, typing `"This"` would return `This`'
+    adv='`<name>` can be a single word in lowercase, any ammount of words inside "", or `current`. `current` will set the channel name to the game you are playing. `<type>` can be an intiger or `private`. If it is an intiger, that will be the client limit. If it is `private`, only whitelisted users will be able to join. To whitelist you need to do `$echannel <channel name>` and then use `#whitelist <name>`.',
+    example='`$cchannel something 8` will return a channel named "Something" with user limit 8\n `$cchannel "Something Cool" private` will return a whitelist-only channel named "Something Cool" with unlimited user limit but whitelist only (giving a name inside "" will be the literal name of the channel)'
 )
 dchannel = Command(
-    cdesc='Deletes the channel with the *exact* name (if you have the permission that is.)',
+    cdesc='Deletes the channel with the **exact** name',
     cname='dchannel',
     args='name',
-    adv = 'null'
+    adv='You must be the owner of the channel to delete it.',
+    example='`$dchannel Sicrit Club` (Using "" on $dchannel is optional)'
 )
 echannel = Command(
     cdesc='Edits a channel.',
     cname='echannel',
     args='name',
-    adv='The valid edit commands are the following:\n `#name <name>` - Replaces the current name with the <name>\n `#limit <limit>` - Replaces the user limit with <limit>\n `#whitelist <user>` - Whitelists the <user> to your private channel'
+    adv='After calling `$echannel <channel>` the bot will wait for you to input an edit command.\n The valid edit commands are the following:\n `#name <name>` - Replaces the current channel name with the `<name>`\n `#limit <limit>` - Replaces the user limit with `<limit>`\n `#whitelist <user>` - Whitelists the `<user>` to your private channel',
+    example='`$echannel Sicrit Club` then after the bot responds: `#name Not Sicrit Club`'
 )
 highnoon = Command(
     cdesc="It's High Noon somewhere in the world. This command tells you where.",
     cname='highnoon',
     args='null',
-    adv='null'
+    adv='null',
+    example='null'
 )
 
 cmds = []
@@ -44,7 +49,8 @@ def get_args(cmd):
     args = cmd.args.split(';')
     args_str = ''
     for arg in args:
-        args_str += '<{}> '.format(arg)
+        if arg != 'null':
+            args_str += '<{}> '.format(arg)
 
     return args_str
 
@@ -60,6 +66,8 @@ async def print_all(message, client):
 
         msg += '\n`${0} {1}` - {2}'.format(cmd.name, args, cmd.desc)
 
+    msg += '\n\n **You can use** `$help <command>` **for more information on each command** (Example: `$help echannel`)'
+
     await client.send_message(message.channel, msg)
 
 async def print_spec(message, client, cmd):
@@ -68,10 +76,13 @@ async def print_spec(message, client, cmd):
     else:
         args = ''
 
-    msg = "**{0}**\n*Syntax*: `${0} {1}`\n*Description*: {2}".format(cmd.name, args, cmd.desc)
+    msg = "**{0}**\n__Syntax__: `${0} {1}`\n__Description__: {2}".format(cmd.name, args, cmd.desc)
 
     if cmd.adv != 'null':
-        msg += '\n*More*:\n {}'.format(cmd.adv)
+        msg += '\n__More__: {}'.format(cmd.adv)
+
+    if cmd.example != 'null':
+        msg += "\n__Example__: {}".format(cmd.example)
 
     await client.send_message(message.channel, msg)
 
