@@ -2,7 +2,7 @@ import discord
 import asyncio
 import pickle
 
-perm_channels = ['CS:GO','Overwatch','Discussion: Greek','Discussion: English','Sicrit Club']
+perm_channels = ['Discussion: Greek','Discussion: English','Sicrit Club']
 
 class VoiceChannel:
     def __init__(self):
