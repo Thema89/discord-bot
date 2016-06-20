@@ -95,7 +95,7 @@ async def cchannel(message, client):
             partyperms = discord.PermissionOverwrite(connect=True)
             channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), (message.author, partyperms), type=discord.ChannelType.voice)
             for member in members:
-                person = discord.utils.find(lambda o: o.name.lower() == member.lower(), message.channel.server.members)
+                person = discord.utils.find(lambda o: o.display_name.lower() == member.lower(), message.channel.server.members)
                 await client.edit_channel_permissions(channel, person, partyperms)
 
         else:
@@ -201,7 +201,7 @@ async def echannel(message, client):
                 elif response[0] == '#setowner':
                     try:
                         owner = response[1].lower()
-                        nowner = discord.utils.find(lambda o: o.name.lower() == owner, message.channel.server.members)
+                        nowner = discord.utils.find(lambda o: o.display_name.lower() == owner, message.channel.server.members)
                         channel.setOwner(nowner)
                         await client.send_message(message.channel, success.format('owner',nowner))
                         break
@@ -214,7 +214,7 @@ async def echannel(message, client):
                 elif response[0] == '#whitelist':
                     try:
                         arg = response[1].lower()
-                        person = discord.utils.find(lambda o: o.name.lower() == arg, message.channel.server.members)
+                        person = discord.utils.find(lambda o: o.display_name.lower() == arg, message.channel.server.members)
                         perms = discord.PermissionOverwrite(connect=True)
                         await client.edit_channel_permissions(chan, person, perms)
                         await client.send_message(message.channel, 'Successfully added {} to the whitelist'.format(person))
