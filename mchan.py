@@ -202,6 +202,10 @@ async def echannel(message, client):
                     try:
                         owner = response[1].lower()
                         nowner = discord.utils.find(lambda o: o.display_name.lower() == owner, message.channel.server.members)
+                        if str(nowner) == 'None':
+                            await client.send_message(message.channel, 'No user found')
+                            break
+
                         channel.setOwner(nowner)
                         await client.send_message(message.channel, success.format('owner',nowner))
                         break
