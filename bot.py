@@ -41,5 +41,12 @@ async def on_message(message):
         await highnoon.where(message, client)
     elif message.content.startswith('$'):
         await client.send_message(message.channel, 'No command found, type `$help` for commands.')
+    elif not message.channel.is_private:
+        if message.author == client.user:
+            await asyncio.sleep(25)
+            await client.delete_message(message)
+        elif message.channel.id == '196605448248360960':
+            await asyncio.sleep(3600)
+            await client.delete_message(message)
 
 client.run('token here')
