@@ -30,6 +30,10 @@ async def cchannel(message, client):
     while True:
         await client.send_typing(message.channel)
 
+        if message.channel.is_private:
+            await client.send_message(message.channel, 'Please call this command from a server channel.')
+            break
+
         if '"' in message.content:
             parse = message.content.split('"')
             for i in range(0, len(parse)):
@@ -118,6 +122,10 @@ async def dchannel(message, client):
     while True:
         await client.send_typing(message.channel)
 
+        if message.channel.is_private:
+            await client.send_message(message.channel, 'Please call this command from a server channel.')
+            break
+
         if '"' in message.content:
             parse = message.content.split('"')
         else:
@@ -158,6 +166,11 @@ async def dchannel(message, client):
 async def echannel(message, client):
     while True:
         await client.send_typing(message.channel)
+
+        if message.channel.is_private:
+            await client.send_message(message.channel, 'Please call this command from a server channel.')
+            break
+        
         parse = message.content.split(' ', 1)
         try:
             name = parse[1]
