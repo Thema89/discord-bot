@@ -3,6 +3,7 @@ import asyncio
 import pickle
 
 perm_channels = ['Discussion: Greek','Discussion: English','Sicrit Club']
+admin_ids = ['93043948775305216']
 
 class VoiceChannel:
     def __init__(self):
@@ -146,7 +147,7 @@ async def dchannel(message, client):
             chan = discord.utils.get(message.server.channels, name=name, type=discord.ChannelType.voice)
             channel = get_voice_channel(chan.id)
 
-            if message.author == channel.owner:
+            if message.author == channel.owner or message.author.id in admin_ids:
                 await client.delete_channel(chan)
                 voice_channels.remove(channel)
                 with open('voice_channels', 'wb') as f:
@@ -170,7 +171,7 @@ async def echannel(message, client):
         if message.channel.is_private:
             await client.send_message(message.channel, 'Please call this command from a server channel.')
             break
-        
+
         parse = message.content.split(' ', 1)
         try:
             name = parse[1]
@@ -185,7 +186,7 @@ async def echannel(message, client):
         try:
             chan = discord.utils.get(message.server.channels, name=name, type=discord.ChannelType.voice)
             channel = get_voice_channel(chan.id)
-            if message.author == channel.owner:
+            if message.author == channel.owner or message.author.id in admin_ids:
                 await client.send_message(message.channel, "Now, enter an edit command... *(use `$help echannel` for more info)*:")
                 await client.send_typing(message.channel)
                 msg = await client.wait_for_message(author=message.author, channel=message.channel)
