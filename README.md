@@ -9,3 +9,6 @@ As such, the main features of my bot are:
 * Let's users edit their channel's Name, User limit, or whitelist other users if it's a private channel.
 * Saves a database of user-created channels locally, so even if the bot restarts it will still remember the owner of each channel etc.
 * Tells you where it's High Noon at. Cool little feature I guess.
+
+### Add to Discord
+To add my bot to discord simply use the following [link](https://discordapp.com/oauth2/authorize?client_id=190034775170351104&scope=bot&permissions=0x0000010)
