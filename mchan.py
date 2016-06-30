@@ -4,7 +4,6 @@ import pickle
 
 perm_channels = ['Discussion: Greek','Discussion: English','Sicrit Club']
 admin_ids = ['93043948775305216']
-access_role_ids = ['189994750986813440','189994787145908224','189994811640643585','193786911330926593']
 
 class VoiceChannel:
     def __init__(self):
@@ -102,12 +101,13 @@ async def cchannel(message, client):
                 for member in members:
                     person = discord.utils.find(lambda o: o.display_name.lower() == member.lower(), message.channel.server.members)
                     await client.edit_channel_permissions(channel, person, access)
-
+        elif str(lim) == 'public':
+            channel = await client.create_channel(message.server, game, type=discord.ChannelType.voice)
         else:
             channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), type=discord.ChannelType.voice)
-            for r_id in access_role_ids:
-                role = discord.utils.get(message.server.roles, id=r_id)
-                await client.edit_channel_permissions(channel, role, access)
+            for role in message.server.roles:
+                if role != message.server.default_role:
+                    await client.edit_channel_permissions(channel, role, access)
 
         listing = VoiceChannel()
         listing.setOwner(message.author)
@@ -194,8 +194,17 @@ async def echannel(message, client):
                 await client.send_typing(message.channel)
                 msg = await client.wait_for_message(author=message.author, channel=message.channel)
 
-                response = msg.content.split(' ', 1)
+                if '"' in msg.content:
+                    response = msg.content.split('"')
+                    for i in range(0, len(response)):
+                        response[i] = response[i].strip()
+                else:
+                    response = msg.content.split(' ', 1)
+
                 success = 'Successfully edited the {0} to {1}'
+
+                everyone = discord.PermissionOverwrite(connect=False)
+                access = discord.PermissionOverwrite(connect=True)
 
                 if response[0] == '#name':
                     try:
@@ -236,12 +245,32 @@ async def echannel(message, client):
                     try:
                         arg = response[1].lower()
                         person = discord.utils.find(lambda o: o.display_name.lower() == arg, message.channel.server.members)
-                        perms = discord.PermissionOverwrite(connect=True)
-                        await client.edit_channel_permissions(chan, person, perms)
+                        await client.edit_channel_permissions(chan, person, access)
                         await client.send_message(message.channel, 'Successfully added {} to the whitelist'.format(person))
                         break
                     except IndexError:
                         await client.send_message(message.channel, 'No user to whitelist.')
+                elif response[0] == '#lock':
+                    await client.edit_channel_permissions(chan, message.server.default_role, everyone)
+                    await client.edit_channel_permissions(chan, message.author, access)
+                    for role in message.server.roles:
+                        if role != message.server.default_role:
+                            await client.delete_channel_permissions(chan, role)
+                    for user in chan.voice_members:
+                        if user != message.author:
+                            await client.edit_channel_permissions(chan, user, access)
+                    await client.send_message(message.channel, 'Successfully converted channel to private')
+                    break
+                elif response[0] == '#unlock':
+                    await client.delete_channel_permissions(chan, message.author)
+                    for role in message.server.roles:
+                        if role != message.server.default_role:
+                            await client.edit_channel_permissions(chan, role, access)
+                    for user in chan.voice_members:
+                        if user != message.author:
+                            await client.delete_channel_permissions(chan, user)
+                    await client.send_message(message.channel, 'Successfully converted channel to semi-public')
+                    break
                 elif response[0].startswith('#'):
                     await client.send_message(message.channel, 'Invalid edit command.')
                     break
