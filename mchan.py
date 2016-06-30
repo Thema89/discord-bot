@@ -4,6 +4,7 @@ import pickle
 
 perm_channels = ['Discussion: Greek','Discussion: English','Sicrit Club']
 admin_ids = ['93043948775305216']
+access_role_ids = ['189994750986813440','189994787145908224','189994811640643585','193786911330926593']
 
 class VoiceChannel:
     def __init__(self):
@@ -85,26 +86,28 @@ async def cchannel(message, client):
             await client.send_message(message.channel, 'You can only create up to 4 channels, you can use $dchannel to delete some though.')
             break
 
-        if str(lim) == 'private':
-            everyone = discord.PermissionOverwrite(connect=False)
-            ownerperms = discord.PermissionOverwrite(connect=True)
-            channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), (message.author, ownerperms), type=discord.ChannelType.voice)
-        elif str(lim) == 'party':
-            try:
-                members = parse[3].split(';')
-            except IndexError:
-                await client.send_message(message.channel, 'No party members specified.')
-                break
+        everyone = discord.PermissionOverwrite(connect=False)
+        access = discord.PermissionOverwrite(connect=True)
 
-            everyone = discord.PermissionOverwrite(connect=False)
-            partyperms = discord.PermissionOverwrite(connect=True)
-            channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), (message.author, partyperms), type=discord.ChannelType.voice)
-            for member in members:
-                person = discord.utils.find(lambda o: o.display_name.lower() == member.lower(), message.channel.server.members)
-                await client.edit_channel_permissions(channel, person, partyperms)
+        if str(lim) == 'private' or str(lim) == 'party':
+            channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), (message.author, access), type=discord.ChannelType.voice)
+            if str(lim) == 'party':
+                try:
+                    members = parse[3].split(';')
+                except IndexError:
+                    await client.delete_channel(channel)
+                    await client.send_message(message.channel, 'No party members specified.')
+                    break
+
+                for member in members:
+                    person = discord.utils.find(lambda o: o.display_name.lower() == member.lower(), message.channel.server.members)
+                    await client.edit_channel_permissions(channel, person, access)
 
         else:
-            channel = await client.create_channel(message.server, game, type=discord.ChannelType.voice)
+            channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), type=discord.ChannelType.voice)
+            for r_id in access_role_ids:
+                role = discord.utils.get(message.server.roles, id=r_id)
+                await client.edit_channel_permissions(channel, role, access)
 
         listing = VoiceChannel()
         listing.setOwner(message.author)
