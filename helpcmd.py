@@ -14,7 +14,7 @@ cchannel = Command(
     cdesc='Creates a channel with the `name`.',
     cname='cchannel',
     args='name;type',
-    adv='`<name>` can be a single word in lowercase, any ammount of words inside "", or `current`. `current` will set the channel name to the game you are playing. `<type>` can be an intiger, `private` or `party`. If it is an intiger, that will be the client limit. If it is `private`, only whitelisted users will be able to join. To whitelist you need to do `$echannel <channel name>` and then use `#whitelist <name>`. If it is `party`, then you must specify party members in the syntax `name1;name2;name3`. It will basically automatically whitelist all the names when the channel is initialized. You can use the normal whitelist to add more members later.',
+    adv='`<name>` can be a single word in lowercase, any ammount of words inside "", or `current`. `current` will set the channel name to the game you are playing. `<type>` can be an intiger, `private`, `party` or `public`. If it is an intiger, that will be the client limit. If it is `private`, only whitelisted users will be able to join. To whitelist you need to do `$echannel <channel name>` and then use `#whitelist <name>`. If it is `party`, then you must specify party members in the syntax `name1;name2;name3`. It will basically automatically whitelist all the names when the channel is initialized. You can use the normal whitelist to add more members later. `public` makes it so even users without perms can join the channel (Keep in mind you could just whitelist them and they could join even without perms)',
     example='`$cchannel something 8` will return a channel named "Something" with user limit 8\n `$cchannel "Something Cool" private` will return a whitelist-only channel named "Something Cool" with unlimited user limit but whitelist only (giving a name inside "" will be the literal name of the channel)\n `$cchannel current party nondy;agouraki`, which will create a private channel with the creator, agouraki and nondy whitelisted by default.'
 )
 dchannel = Command(
@@ -28,7 +28,7 @@ echannel = Command(
     cdesc='Edits a channel.',
     cname='echannel',
     args='name',
-    adv='After calling `$echannel <channel>` the bot will wait for you to input an edit command.\n The valid edit commands are the following:\n `#name <name>` - Replaces the current channel name with the `<name>`\n `#limit <limit>` - Replaces the user limit with `<limit>`\n `#whitelist <user>` - Whitelists the `<user>` to your private channel',
+    adv='After calling `$echannel <channel>` the bot will wait for you to input an edit command.\n The valid edit commands are the following:\n `#name <name>` - Replaces the current channel name with the `<name>`\n `#limit <limit>` - Replaces the user limit with `<limit>`\n `#whitelist <user>` - Whitelists the `<user>` to your private channel\n `#lock` - Locks the channel, making it private, whitelisting all users already in the channel.\n `#unlock` - Unlocks the channel, deletes the whitelist, and makes it so users with perms can join.',
     example='`$echannel Sicrit Club` then after the bot responds: `#name Not Sicrit Club`'
 )
 highnoon = Command(
