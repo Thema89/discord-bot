@@ -62,8 +62,10 @@ async def cchannel(message, client):
         elif game.lower() == 'Current'.lower():
             game = str(message.author.game)
 
-        if game.lower() == 'Counter-Strike: Global Offensive'.lower():
+        if game == 'Counter-Strike: Global Offensive':
             game = 'CS:GO'
+        elif game == 'Grand Theft Auto V':
+            game = 'GTA V'
 
         exist = sum(c.name.startswith(game) for c in message.server.channels)
         num = str(exist + 1)
