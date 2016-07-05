@@ -108,7 +108,7 @@ async def cchannel(message, client):
         else:
             channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), type=discord.ChannelType.voice)
             for role in message.server.roles:
-                if role != message.server.default_role and not role.administrator:
+                if role != message.server.default_role and not role.permissions.administrator:
                     await client.edit_channel_permissions(channel, role, access)
 
         listing = VoiceChannel()
