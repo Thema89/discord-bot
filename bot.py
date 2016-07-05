@@ -6,6 +6,7 @@ import logging
 import mchan
 import highnoon
 import helpcmd
+import modtools
 
 # Logging to a file
 logger = logging.getLogger('discord')
@@ -39,6 +40,8 @@ async def on_message(message):
         await mchan.echannel(message, client)
     elif message.content.startswith('$highnoon'):
         await highnoon.where(message, client)
+    elif message.content.startswith('$purge'):
+        await modtools.purge(message, client)
     elif message.content.startswith('$'):
         await client.send_message(message.channel, 'No command found, type `$help` for commands.')
     elif not message.channel.is_private:
