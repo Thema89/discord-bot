@@ -42,6 +42,8 @@ async def on_message(message):
         await highnoon.where(message, client)
     elif message.content.startswith('$purge'):
         await modtools.purge(message, client)
+    elif message.content.startswith('$mvmembers'):
+        await modtools.mvmembers(message, client)
     elif message.content.startswith('$'):
         await client.send_message(message.channel, 'No command found, type `$help` for commands.')
     elif not message.channel.is_private:

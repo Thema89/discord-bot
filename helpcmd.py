@@ -11,9 +11,6 @@ class Command:
         self.example = example
         self.perms = perms
 
-    def set_perms(self, perms):
-        self.perms = perms
-
 cchannel = Command(
     cdesc='Creates a channel with the `name`.',
     cname='cchannel',
@@ -45,7 +42,6 @@ highnoon = Command(
     adv='null',
     example='null',
     perms=True
-
 )
 purge = Command(
     cdesc="Purges a user from a channel. (Deletes their messages)",
@@ -54,6 +50,14 @@ purge = Command(
     adv='Checks the last 100 messages in the channel by default. To make it look in more or less messages, just specify a `<limit>` (should be an intiger)',
     example='`$purge nondy 40`',
     perms='manage_messages'
+)
+mvmembers = Command(
+    cdesc="Moves users to a channel.",
+    cname='mvmembers',
+    args='channel;members',
+    adv='Members must be in the same syntax as `$cchannel something party`, so like this `nondy;rain;petergrove`',
+    example='`$mvmembers CS:GO rain;agouraki;nondy;hydratec`',
+    perms='move_members'
 )
 
 cmds = []
