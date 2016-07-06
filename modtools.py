@@ -12,7 +12,7 @@ async def purge(message, client):
         await client.send_typing(message.channel)
 
         if not is_admin(message):
-            await client.send_message(message.channel, 'Only admins can call this command.')
+            await client.send_message(message.channel, 'You need the "Manage Messages" permission to call this command.')
             break
 
         parse = message.content.split()
