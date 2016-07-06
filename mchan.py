@@ -235,7 +235,7 @@ async def echannel(message, client):
                             break
 
                         channel.setOwner(nowner)
-                        await client.send_message(message.channel, success.format('owner',nowner))
+                        await client.send_message(message.channel, success.format('owner',nowner.mention))
                         break
                     except IndexError:
                         await client.send_message(message.channel, 'No new owner specified.')
@@ -248,7 +248,7 @@ async def echannel(message, client):
                         arg = response[1].lower()
                         person = discord.utils.find(lambda o: o.display_name.lower() == arg, message.channel.server.members)
                         await client.edit_channel_permissions(chan, person, access)
-                        await client.send_message(message.channel, 'Successfully added {} to the whitelist'.format(person))
+                        await client.send_message(message.channel, 'Successfully added {} to the whitelist'.format(person.mention))
                         break
                     except IndexError:
                         await client.send_message(message.channel, 'No user to whitelist.')
