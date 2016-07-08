@@ -39,6 +39,10 @@ async def cchannel(message, client):
             parse = message.content.split('"')
             for i in range(0, len(parse)):
                 parse[i] = parse[i].strip()
+            if 'party ' in parse[2]:
+                p = parse[2].split()
+                parse[2] = p[0]
+                parse.append(p[1])
         else:
             parse = message.content.split()
 
