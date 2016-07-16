@@ -1,23 +1,12 @@
 import discord
 import asyncio
-
-def has_msg(message):
-    for role in message.author.roles:
-        if role.permissions.manage_messages:
-            return True
-            break
-
-def has_move(message):
-    for role in message.author.roles:
-        if role.permissions.move_members:
-            return True
-            break
+import checks
 
 async def purge(message, client):
     while True:
         await client.send_typing(message.channel)
 
-        if not has_msg(message):
+        if not checks.has_msg(message):
             await client.send_message(message.channel, 'You need the "Manage Messages" permission to call this command.')
             break
 
@@ -47,7 +36,7 @@ async def mvmembers(message, client):
     while True:
         await client.send_typing(message.channel)
 
-        if not has_move(message):
+        if not checks.has_move(message):
             await client.send_message(message.channel, 'You need the "Move Members" permission to call this command.')
             break
 

@@ -6,15 +6,12 @@ perm_channels = ['Discussion: Greek','Discussion: English','Sicrit Club']
 admin_ids = ['93043948775305216']
 
 class VoiceChannel:
-    def __init__(self):
-        self.owner = ""
-        self.chanid = 0
+    def __init__(self, owner, cid):
+        self.owner = owner
+        self.chanid = cid
 
     def setOwner(self, user):
         self.owner = user
-
-    def setID(self, cid):
-        self.chanid = cid
 
 with open('voice_channels', 'rb') as f:
     try:
@@ -105,19 +102,19 @@ async def cchannel(message, client):
                     break
 
                 for member in members:
-                    person = discord.utils.find(lambda o: o.display_name.lower() == member.lower(), message.channel.server.members)
+                    person = discord.utils.find(lambda o: o.name.lower() == member.lower() or member.lower() in o.display_name.lower(), message.channel.server.members)
                     await client.edit_channel_permissions(channel, person, access)
         elif str(lim) == 'public':
             channel = await client.create_channel(message.server, game, type=discord.ChannelType.voice)
-        else:
+        elif str(lim) == 'semipub':
             channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), type=discord.ChannelType.voice)
             for role in message.server.roles:
                 if role != message.server.default_role and not role.permissions.administrator:
                     await client.edit_channel_permissions(channel, role, access)
+        else:
+            channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), type=discord.ChannelType.voice)
 
-        listing = VoiceChannel()
-        listing.setOwner(message.author)
-        listing.setID(channel.id)
+        listing = VoiceChannel(owner=message.author, cid=channel.id)
         voice_channels.append(listing)
 
         with open('voice_channels', 'wb') as f:
@@ -233,7 +230,7 @@ async def echannel(message, client):
                 elif response[0] == '#setowner':
                     try:
                         owner = response[1].lower()
-                        nowner = discord.utils.find(lambda o: o.display_name.lower() == owner, message.channel.server.members)
+                        nowner = discord.utils.find(lambda o: o.name.lower() == owner.lower() or owner.lower() in o.display_name.lower(), message.channel.server.members)
                         if str(nowner) == 'None':
                             await client.send_message(message.channel, 'No user found')
                             break
@@ -250,9 +247,9 @@ async def echannel(message, client):
                 elif response[0] == '#whitelist':
                     try:
                         arg = response[1].lower()
-                        person = discord.utils.find(lambda o: o.display_name.lower() == arg, message.channel.server.members)
+                        person = discord.utils.find(lambda o: o.name.lower() == arg.lower() or arg.lower() in o.display_name.lower(), message.channel.server.members)
                         await client.edit_channel_permissions(chan, person, access)
-                        await client.send_message(message.channel, 'Successfully added {} to the whitelist'.format(person.mention))
+                        await client.send_message(message.channel, 'Successfully added {} to the whitelist'.format(person.display_name))
                         break
                     except IndexError:
                         await client.send_message(message.channel, 'No user to whitelist.')
