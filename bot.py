@@ -2,11 +2,14 @@
 import discord
 import asyncio
 import logging
+import pickle
 
 import mchan
 import highnoon
 import helpcmd
 import modtools
+import checks
+import wow
 
 # Logging to a file
 logger = logging.getLogger('discord')
@@ -26,6 +29,9 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
+    for server in client.servers:
+        print(server.name)
+    print('------')
     #await client.edit_profile(avatar=avatar)
 
 @client.event
@@ -44,6 +50,10 @@ async def on_message(message):
         await modtools.purge(message, client)
     elif message.content.startswith('$mvmembers'):
         await modtools.mvmembers(message, client)
+    elif message.content.startswith('$addwowsv'):
+        await wow.addwowsv(message, client)
+    elif message.content.startswith('$class'):
+        await wow.setclass(message, client)
     elif message.content.startswith('$'):
         await client.send_message(message.channel, 'No command found, type `$help` for commands.')
     elif not message.channel.is_private:
