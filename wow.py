@@ -27,13 +27,16 @@ def get_class(message):
         if role.name in classes:
             return role
 
-
 async def addwowsv(message, client):
     await client.send_typing(message.channel)
     if checks.has_admin(message):
         if not message.server.id in wow_server_ids:
+            for c in classes:
+                if not c in [o.name for o in message.server.roles]:
+                    await client.create_role(message.server,name=c)
+
             wow_server_ids.append(message.server.id)
-            await client.send_message(message.channel, 'Successfully added the WoW server! Appropriate groups for the classes will be created!')
+            await client.send_message(message.channel, 'Successfully added the WoW server! Appropriate groups for the classes have bee created! You do need to add the colors to the classes though. Official class colors can be found here: http://wowwiki.wikia.com/wiki/Class_colors')
         else:
             await client.send_message(message.channel, 'It is already a WoW server, it seems.')
     else:
@@ -43,13 +46,7 @@ async def setclass(message, client):
     await client.send_typing(message.channel)
     if message.server.id in wow_server_ids:
         ex_class = get_class(message)
-        if ex_class != None:
-            await client.remove_roles(message.author, ex_class)
-
         parse = message.content.split(' ', 1)
-
-        await asyncio.sleep(.02)
-
         try:
             cname = parse[1]
         except IndexError:
@@ -59,6 +56,9 @@ async def setclass(message, client):
             role = discord.utils.get(message.server.roles, name=cname.title())
             if role != None:
                 await client.add_roles(message.author, role)
+                await asyncio.sleep(.02)
+                if ex_class != None:
+                    await client.remove_roles(message.author, ex_class)
                 await client.send_message(message.channel, 'Successfully set you as a {}'.format(role.name))
             else:
                 await client.send_message(message.channel, "Doesn't seem to be a Role for this class. Try contacting server admins so they can add it.")
