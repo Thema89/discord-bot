@@ -59,6 +59,22 @@ mvmembers = Command(
     example='`$mvmembers CS:GO rain;agouraki;nondy;hydratec`',
     perms='move_members'
 )
+addwowsv = Command(
+    cdesc='Whitelists the current server as a WoW server and adds WoW functionality to it.',
+    cname='addwowsv',
+    args='null',
+    adv='Also lets the bot add a role for every class in the game.',
+    example='null',
+    perms='administrator'
+)
+wowclass = Command(
+    cdesc='Sets you as the WoW class you specify.',
+    cname='class',
+    args='wowclass',
+    adv='Only available on WoW discords.',
+    example='`$class death knight`',
+    perms=True
+)
 
 cmds = []
 
