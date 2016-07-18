@@ -9,7 +9,7 @@ As such, the main features of my bot are:
 * Let's users edit their channel's Name, User limit, or whitelist other users if it's a private channel.
 * Saves a database of user-created channels locally, so even if the bot restarts it will still remember the owner of each channel etc.
 * Tells you where it's High Noon at. Cool little feature I guess.
-* Gives everyone with the move_members permission the ability to call a command to mass-move members to other channelsl.
+* Gives everyone with the move_members permission the ability to call a command to mass-move members to other channels.
 * Gives everyone with the manage_messages permission the ability to mass-delete a user's messages
 * Gives the ability to mark a server as a "WoW" Discord so WoW-related features are enabled.
   * When you add a server as a WoW Discord then the bot creates all the necesesary roles for every class (if they don't exist) without colors.
