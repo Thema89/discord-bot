@@ -104,15 +104,13 @@ async def cchannel(message, client):
                 for member in members:
                     person = discord.utils.find(lambda o: o.name.lower() == member.lower() or member.lower() in o.display_name.lower(), message.channel.server.members)
                     await client.edit_channel_permissions(channel, person, access)
-        elif str(lim) == 'public':
-            channel = await client.create_channel(message.server, game, type=discord.ChannelType.voice)
         elif str(lim) == 'semipub':
             channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), type=discord.ChannelType.voice)
             for role in message.server.roles:
                 if role != message.server.default_role and not role.permissions.administrator:
                     await client.edit_channel_permissions(channel, role, access)
         else:
-            channel = await client.create_channel(message.server, game, (message.server.default_role, everyone), type=discord.ChannelType.voice)
+            channel = await client.create_channel(message.server, game, type=discord.ChannelType.voice)
 
         listing = VoiceChannel(owner=message.author, cid=channel.id)
         voice_channels.append(listing)
