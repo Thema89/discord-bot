@@ -68,7 +68,7 @@ async def mvmembers(message, client):
         channel = discord.utils.get(message.server.channels, name=cname, type=discord.ChannelType.voice)
         if channel != None:
             for member in members:
-                user = discord.utils.find(lambda o: o.display_name.lower() == member.lower(), message.channel.server.members)
+                user = discord.utils.find(lambda o: member.lower() in o.display_name.lower(), message.channel.server.members)
                 await client.move_member(user, channel)
         else:
             await client.send_message(message.channel, 'Channel not found.')

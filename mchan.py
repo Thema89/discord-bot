@@ -2,7 +2,7 @@ import discord
 import asyncio
 import pickle
 
-perm_channels = ['Discussion: Greek','Discussion: English','Sicrit Club']
+perm_channels = ['General','English-only','Music','AFK-Club']
 admin_ids = ['93043948775305216']
 
 class VoiceChannel:
